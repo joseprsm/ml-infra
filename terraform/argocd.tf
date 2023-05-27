@@ -1,6 +1,6 @@
 resource "kubernetes_namespace" "argocd_namespace" {
   metadata {
-    name = "argocd"
+    name = var.argocd_namespace
   }
 }
 
@@ -23,6 +23,7 @@ resource "kubernetes_manifest" "argocd_install" {
 resource "kubernetes_manifest" "argocd_applications" {
   for_each = fileset("../argocd", "**")
   manifest = yamldecode(file("../argocd/${each.value}"))
+  depends_on = [ kubernetes_manifest.argocd_install ]
 }
 
 data "http" "argocd_install" {
