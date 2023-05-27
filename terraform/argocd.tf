@@ -4,7 +4,7 @@ resource "kubernetes_namespace" "argocd_namespace" {
   }
 }
 
-resource "kubernetes_manifest" "argocd-manifests" {
+resource "kubernetes_manifest" "argocd_install" {
   count = length(local.hcl_argocd_manifests)
 
   manifest = merge(
@@ -18,6 +18,11 @@ resource "kubernetes_manifest" "argocd-manifests" {
       )
     }
   )
+}
+
+resource "kubernetes_manifest" "argocd_applications" {
+  for_each = fileset("../argocd", "**")
+  manifest = yamldecode(file("../argocd/${each.value}"))
 }
 
 data "http" "argocd_install" {
