@@ -20,15 +20,18 @@ resource "kubernetes_manifest" "argocd_install" {
   )
 }
 
-resource "kustomization_resource" "argocd_applications" {
-  provider = kustomization
-  for_each = [for file in fileset("../argocd", "**") : file != "argocd/base"]
-  manifest = yamldecode(file("../argocd/${each.value}"))
+resource "kustomization_resource" "argocd_apps" {
+  for_each = data.kustomization_build.build.ids
+  manifest = data.kustomization_build.build.manifests[each.value]
   depends_on = [ kubernetes_manifest.argocd_install ]
 }
 
 data "http" "argocd_install" {
   url = "https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
+}
+
+data "kustomization_build" "build" {
+  path = "../argocd/apps/kserve"
 }
 
 locals {
