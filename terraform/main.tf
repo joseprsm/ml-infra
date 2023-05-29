@@ -1,11 +1,10 @@
 terraform {
   required_providers {
     kustomization = {
-      source  = "kbst/kustomize"
-      version = "0.2.0-beta.3"
+      source  = "kbst/kustomization"
+      version = "0.9.0"
     }
   }
-  required_version = ">= 0.12"
 }
 
 provider "kubernetes" {
@@ -13,4 +12,6 @@ provider "kubernetes" {
   config_context = "minikube"
 }
 
-provider "kustomization" {}
+provider "kustomization" {
+  kubeconfig_path = "~/.kube/config"
+}
