@@ -20,8 +20,9 @@ resource "kubernetes_manifest" "argocd_install" {
   )
 }
 
-resource "kubernetes_manifest" "argocd_applications" {
-  for_each = fileset("../argocd", "**")
+resource "kustomization_resource" "argocd_applications" {
+  provider = kustomization
+  for_each = [for file in fileset("../argocd", "**") : file != "argocd/base"]
   manifest = yamldecode(file("../argocd/${each.value}"))
   depends_on = [ kubernetes_manifest.argocd_install ]
 }

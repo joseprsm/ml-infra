@@ -1,0 +1,25 @@
+resources:
+  - ../base
+
+patches:
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: base
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: kserve
+      - op: add
+        path: /spec/source/repoURL
+        value: https://community-charts.github.io/helm-charts
+      - op: add
+        path: /spec/source/targetRevision
+        value: 1.0.1
+      - op: add
+        path: /spec/source/chart
+        value: kserve
+      - op: add
+        path: /spec/destination/namespace
+        value: kserve
