@@ -21,8 +21,17 @@ resource "kubernetes_manifest" "argocd_install" {
 }
 
 resource "kustomization_resource" "argocd_apps" {
-  for_each = data.kustomization_build.build.ids
-  manifest = data.kustomization_build.build.manifests[each.value]
+  for_each = {
+    for kustomize in flatten([
+      for build in data.kustomization_build.build : [
+        for id in build.ids : {
+          id = id
+          manifest = build.manifests[id]
+        }
+      ]
+    ]) : "${kustomize.id}" => kustomize
+  }
+  manifest = each.value.manifest 
   depends_on = [ kubernetes_manifest.argocd_install ]
 }
 
@@ -31,10 +40,11 @@ data "http" "argocd_install" {
 }
 
 data "kustomization_build" "build" {
-  path = "../argocd/apps/kserve"
+  for_each = fileset("../argocd/apps", "**")
+  path = "../argocd/apps/${dirname(each.value)}"
 }
 
 locals {
   raw_argocd_manifests = split("---", data.http.argocd_install.response_body)
-  hcl_argocd_manifests = [for argo_manifest in local.raw_argocd_manifests : yamldecode(argo_manifest)]
+  hcl_argocd_manifests = [ for argo_manifest in local.raw_argocd_manifests : yamldecode(argo_manifest) ]
 }
