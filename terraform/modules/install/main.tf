@@ -25,6 +25,6 @@ data "http" "install_file" {
 }
 
 locals {
-  raw_manifests = split("---", data.http.install.response_body)
+  raw_manifests = split("---", data.http.install_file.response_body)
   hcl_manifests = [ for manifest in local.raw_manifests : yamldecode(manifest) ]
 }
