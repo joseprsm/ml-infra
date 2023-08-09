@@ -13,7 +13,7 @@ resource "kubernetes_manifest" "install_manifest" {
             "metadata": merge(
                 local.hcl_manifests[count.index].metadata,
                 {
-                    "namespace": lookup(local.hcl_manifests[count.index], "kind", "") == "CustomResourceDefinition" || lookup(local.hcl_manifests[count.index], "kind", "") == "ClusterRoleBinding" || lookup(local.hcl_manifests[count.index], "kind", "") == "ClusterRole" ? null : kubernetes_namespace.install_namespace.metadata[0].name
+                    "namespace": lookup(local.hcl_manifests[count.index], "kind", "") == "PriorityClass" || lookup(local.hcl_manifests[count.index], "kind", "") == "CustomResourceDefinition" || lookup(local.hcl_manifests[count.index], "kind", "") == "ClusterRoleBinding" || lookup(local.hcl_manifests[count.index], "kind", "") == "ClusterRole" ? null : kubernetes_namespace.install_namespace.metadata[0].name
                 }
             )
         }
