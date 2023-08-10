@@ -9,7 +9,7 @@ spec:
   - matrix:
       generators:
       - git:
-          repoURL: https://www.github.com/joseprsm/ml-infra.git
+          repoURL: https://github.com/joseprsm/ml-infra.git
           revision: HEAD
           files:
           - path: charts.yaml
