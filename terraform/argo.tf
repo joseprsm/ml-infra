@@ -1,4 +1,4 @@
-resource "helm_release" "release" {
+resource "helm_release" "argo" {
   for_each = {
     argo-cd = {
       name      = "argocd"
