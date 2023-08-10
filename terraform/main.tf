@@ -1,16 +1,29 @@
 provider "kubernetes" {
   config_path    = var.kube_config
-  config_context = "minikube"
+  config_context = var.kube_context
 }
 
-module "argocd" {
-  source = "./modules/install"
-  name   = "argocd"
-  url    = "https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
+provider "helm" {
+  kubernetes {
+    config_path = var.kube_config
+  }
 }
 
-module "argo_workflows" {
-  source = "./modules/install"
-  name   = "argo"
-  url    = "https://github.com/argoproj/argo-workflows/releases/download/v3.4.9/install.yaml"
+resource "helm_release" "release" {
+  for_each = {
+    argo-cd = {
+      name      = "argocd"
+      namespace = "argocd"
+    }
+    argo-workflows = {
+      name      = "argo-workflows"
+      namespace = "argo"
+    }
+  }
+
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = each.key
+  name             = each.value.name
+  namespace        = each.value.namespace
+  create_namespace = true
 }
