@@ -7,6 +7,6 @@ resource "helm_release" "argocd" {
 }
 
 resource "kubernetes_manifest" "ml_apps" {
-    manifest = yamldecode(file("../argocd/application.yaml"))
+    manifest = yamldecode(file("../application.yaml"))
     depends_on = [ helm_release.argocd ]
 }
