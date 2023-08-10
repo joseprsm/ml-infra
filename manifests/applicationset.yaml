@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ml-apps
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+  - matrix:
+      generators:
+      - git:
+          repoURL: https://www.github.com/joseprsm/ml-infra.git
+          revision: HEAD
+          files:
+          - path: charts.yaml
+      - list:
+          elements: []
+          elementsYaml: '{{ .charts | toJson }}'
+  template:
+    metadata:
+      name: '{{ .name }}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        chart: '{{ .chart }}'
+        repoURL: '{{ .repoUrl }}'
+        targetRevision: '{{ .version }}'
+        helm:
+          releaseName: '{{ .name }}'
+      destination:
+        name: in-cluster
+        namespace: >-
+          {{- if .namespace }}
+          {{ .namespace }}
+          {{- else -}}
+          {{ .name }}
+          {{- end -}}
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
