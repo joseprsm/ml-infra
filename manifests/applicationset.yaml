@@ -22,19 +22,23 @@ spec:
       namespace: argocd
     spec:
       project: default
-      source:
-        chart: '{{ .chart }}'
+      sources:
+      - chart: '{{ .chart }}'
         repoURL: '{{ .repoUrl }}'
         targetRevision: '{{ .version }}'
         helm:
           releaseName: '{{ .name }}'
+          valueFiles: [ '{{ if .hasCustomValues }} $values/{{ .name }}.values.yaml {{ end }}' ]
+      - repoURL: https://github.com/joseprsm/ml-infra.git
+        targetRevision: HEAD
+        directory:
+          include: values
+        ref: values
       destination:
         name: in-cluster
         namespace: >-
-          {{- if .namespace }}
-          {{ .namespace }}
-          {{- else -}}
-          {{ .name }}
+          {{- if .namespace }}{{ .namespace }}
+          {{- else }}{{ .name }}
           {{- end -}}
       syncPolicy:
         syncOptions:

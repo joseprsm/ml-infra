@@ -8,9 +8,9 @@ charts:
   repoUrl: https://community-charts.github.io/helm-charts
   chart: mlflow
   version: "0.7.19"
+  hasCustomValues: true
 
 - name: argo
   repoUrl: https://argoproj.github.io/argo-helm
   chart: argo-workflows
   version: "0.32.2"
-
