@@ -6,6 +6,7 @@ metadata:
 spec:
   goTemplate: true
   generators:
+  # this generator will point to the charts.yaml and fetch its contents
   - matrix:
       generators:
       - git:
@@ -28,7 +29,9 @@ spec:
         targetRevision: '{{ .version }}'
         helm:
           releaseName: '{{ .name }}'
-          valueFiles: [ '{{ if .hasCustomValues }} $values/{{ .name }}.values.yaml {{ end }}' ]
+          # unlikely to work but avoids having something like null.values.yaml
+          valueFiles: [ '{{ if .hasCustomValues }} $values/values/{{ .name }}.values.yaml {{ end }}' ]
+      # this second source is necessary to point to the values files
       - repoURL: https://github.com/joseprsm/ml-infra.git
         targetRevision: HEAD
         directory:
