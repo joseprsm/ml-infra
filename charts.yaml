@@ -2,19 +2,15 @@ charts:
 - name: kserve
   repoUrl: https://community-charts.github.io/helm-charts
   chart: kserve
-  version: ...
+  version: "1.0.1"
 
 - name: mlflow
   repoUrl: https://community-charts.github.io/helm-charts
   chart: mlflow
-  version: ...
+  version: "0.7.19"
 
 - name: argo
   repoUrl: https://argoproj.github.io/argo-helm
   chart: argo-workflows
-  version: ...
+  version: "0.32.2"
 
-- name: grafana
-  repoUrl: https://grafana.github.io/helm-charts
-  chart: grafana-agent-operator
-  version: ...
