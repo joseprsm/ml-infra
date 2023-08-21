@@ -1,0 +1,12 @@
+namespace: argocd
+
+project: default
+
+destination:
+  name: in-cluster
+  namespace: '{{ .name }}'
+
+charts:
+- name: cert-manager
+  chart: cert-manager
+  repoUrl: https://charts.jetstack.io

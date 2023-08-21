@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ml-apps
+  namespace: {{ .Values.namespace }}
+spec:
+  goTemplate: true
+  generators:
+  - list:
+      elements:
+      {{- toYaml .Values.charts | nindent 6 }}
+  template:
+    metadata:
+      name: '{{ `{{ .name }}` }}'
+      namespace: {{ .Values.namespace }}
+    spec:
+      project: {{ .Values.project }}
+      source:
+        chart: '{{ `{{ .chart }}` }}'
+        repoURL: '{{ `{{ .repoUrl }}` }}'
+        targetRevision: '{{ `{{ .version }}` }}'
+        helm:
+          releaseName: '{{ `{{ .name }}` }}'
+          valueFiles:
+          - >-
+            {{ `{{- if .values -}}` }}
+            'values/{{ `{{ .name }}` }}.values.yaml'
+            {{ `{{- else -}}` }}
+            values/.values.yaml
+            {{ `{{- end }}` }}
+      destination:
+        name: {{ .Values.destination.name }}
+        namespace: '{{ .Values.destination.namespace }}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        automated:
+          prune: true

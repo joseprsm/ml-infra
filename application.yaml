@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/joseprsm/ml-infra.git
-    path: manifests/
+    path: helm/ml-apps
     targetRevision: HEAD
   destination:
     name: in-cluster

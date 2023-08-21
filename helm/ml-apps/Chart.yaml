@@ -1,0 +1,7 @@
+name: ml-apps
+version: 0.1.0
+apiVersion: v2
+dependencies:
+- name: ml-common
+  repository: file://../ml-common
+  version: "0.1.0"
