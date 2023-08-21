@@ -29,8 +29,13 @@ spec:
         targetRevision: '{{ .version }}'
         helm:
           releaseName: '{{ .name }}'
-          # unlikely to work but avoids having something like null.values.yaml
-          valueFiles: [ '{{ if .hasCustomValues }} $values/values/{{ .name }}.values.yaml {{ end }}' ]
+          valueFiles: 
+          - >- 
+            {{- if .values -}}
+            $values/values/{{ .name }}.values.yaml
+            {{- else -}}
+            $values/values/.values.yaml
+            {{- end }}
       # this second source is necessary to point to the values files
       - repoURL: https://github.com/joseprsm/ml-infra.git
         targetRevision: HEAD
