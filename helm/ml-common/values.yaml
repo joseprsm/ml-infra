@@ -10,3 +10,4 @@ charts:
 - name: cert-manager
   chart: cert-manager
   repoUrl: https://charts.jetstack.io
+  version: 'v1.12.0'
