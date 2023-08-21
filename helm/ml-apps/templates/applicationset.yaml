@@ -15,19 +15,24 @@ spec:
       namespace: {{ .Values.namespace }}
     spec:
       project: {{ .Values.project }}
-      source:
-        chart: '{{ `{{ .chart }}` }}'
+      sources:
+      - chart: '{{ `{{ .chart }}` }}'
         repoURL: '{{ `{{ .repoUrl }}` }}'
         targetRevision: '{{ `{{ .version }}` }}'
         helm:
           releaseName: '{{ `{{ .name }}` }}'
           valueFiles:
           - >-
-            {{ `{{- if .values -}}` }}
-            'values/{{ `{{ .name }}` }}.values.yaml'
-            {{ `{{- else -}}` }}
-            values/.values.yaml
-            {{ `{{- end }}` }}
+            {{ `{{- if .values -}}
+            $values/values/{{ .name }}.values.yaml
+            {{- else -}}
+            $values/values/.values.yaml
+            {{- end -}}` }}
+      - repoURL: https://github.com/joseprsm/ml-infra.git
+        targetRevision: HEAD
+        directory:
+          include: helm/ml-apps/values
+        ref: values
       destination:
         name: {{ .Values.destination.name }}
         namespace: '{{ .Values.destination.namespace }}'
