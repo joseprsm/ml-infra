@@ -6,8 +6,8 @@ metadata:
 spec:
   goTemplate: true
   generators:
-  - list: 
-      elements: 
+  - list:
+      elements:
       {{- toYaml .Values.charts | nindent 6 }}
   template:
     metadata:
@@ -25,5 +25,3 @@ spec:
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
-        automated:
-          prune: true
