@@ -4,7 +4,12 @@ project: default
 
 destination:
   name: in-cluster
-  namespace: '{{ .name }}'
+  namespace: >-
+    {{- if .namespace -}}
+    {{ .namespace }}
+    {{- else -}}
+    {{ .name }}
+    {{- end }}
 
 charts:
 - name: kserve

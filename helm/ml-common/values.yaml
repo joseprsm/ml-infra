@@ -16,3 +16,4 @@ charts:
   chart: kube-prometheus-stack
   repoUrl: https://prometheus-community.github.io/helm-charts
   version: '48.3.2'
+  namespace: prometheus
