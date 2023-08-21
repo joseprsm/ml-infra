@@ -11,3 +11,8 @@ charts:
   chart: cert-manager
   repoUrl: https://charts.jetstack.io
   version: 'v1.12.0'
+
+- name: prometheus-stack
+  chart: kube-prometheus-stack
+  repoUrl: https://prometheus-community.github.io/helm-charts
+  version: '48.3.2'
