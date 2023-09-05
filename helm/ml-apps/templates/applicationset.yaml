@@ -24,9 +24,9 @@ spec:
           valueFiles:
           - >-
             {{ `{{- if .values -}}
-            $values/values/{{ .name }}.values.yaml
+            $values/helm/ml-apps/values/{{ .name }}.values.yaml
             {{- else -}}
-            $values/values/.values.yaml
+            $values/helm/ml-apps/values/.values.yaml
             {{- end -}}` }}
       - repoURL: https://github.com/joseprsm/ml-infra.git
         targetRevision: HEAD
